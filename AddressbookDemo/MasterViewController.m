@@ -9,6 +9,7 @@
 #import "MasterViewController.h"
 #import "DetailViewController.h"
 #import "AddressbookDataSource.h"
+#import "PersonTableViewCell.h"
 
 @interface MasterViewController ()
 
@@ -20,11 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.dataSource = [[AddressbookDataSource alloc] init];
 }
@@ -81,16 +78,33 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    PersonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
     NSDictionary *object = self.dataSource.contacts[indexPath.row];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@",object[@"Name"],object[@"Phone"]];
     NSData *imageData = object[@"Image"];
+    UIImage *image = nil;
+    
+    cell.nameLabel.text = object[@"Name"];
+    cell.phoneLabel.text = [NSString stringWithFormat:@"My Number: %@",object[@"Phone"]];
+    
     if (imageData) {
-        cell.imageView.image = [UIImage imageWithData:imageData];
+        image = [UIImage imageWithData:imageData];
     } else {
-        cell.imageView.image = nil;
+        image = [UIImage imageNamed:@"defaultImage"];
     }
+    UIImageView *imageView = cell.personImage;
+    CGFloat radius = MIN(CGRectGetWidth(imageView.bounds), CGRectGetHeight(imageView.bounds)) / 2;
+    imageView.layer.cornerRadius = radius;
+    imageView.clipsToBounds = YES;
+    imageView.image = image;
+
+    cell.backgroundImage.image = image;
+
+    [cell.blurView removeFromSuperview];
+    cell.blurView.frame = cell.backgroundImage.bounds;
+    [cell.backgroundImage addSubview:cell.blurView];
+
+    
     return cell;
 }
 

@@ -15,6 +15,8 @@
 		27517C2C1ED8C9C700D7BB7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27517C2B1ED8C9C700D7BB7B /* Assets.xcassets */; };
 		27517C2F1ED8C9C700D7BB7B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27517C2D1ED8C9C700D7BB7B /* LaunchScreen.storyboard */; };
 		27517C381ED8CA0500D7BB7B /* AddressbookDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 27517C371ED8CA0500D7BB7B /* AddressbookDataSource.m */; };
+		27517C3B1ED8F99C00D7BB7B /* PersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 27517C3A1ED8F99C00D7BB7B /* PersonTableViewCell.m */; };
+		27517C3D1ED8FC9F00D7BB7B /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 27517C3C1ED8FC9F00D7BB7B /* defaultImage.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,9 @@
 		27517C301ED8C9C700D7BB7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27517C361ED8CA0500D7BB7B /* AddressbookDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressbookDataSource.h; sourceTree = "<group>"; };
 		27517C371ED8CA0500D7BB7B /* AddressbookDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressbookDataSource.m; sourceTree = "<group>"; };
+		27517C391ED8F99C00D7BB7B /* PersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTableViewCell.h; sourceTree = "<group>"; };
+		27517C3A1ED8F99C00D7BB7B /* PersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTableViewCell.m; sourceTree = "<group>"; };
+		27517C3C1ED8FC9F00D7BB7B /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +69,9 @@
 		27517C1B1ED8C9C700D7BB7B /* AddressbookDemo */ = {
 			isa = PBXGroup;
 			children = (
+				27517C3C1ED8FC9F00D7BB7B /* defaultImage.png */,
+				27517C391ED8F99C00D7BB7B /* PersonTableViewCell.h */,
+				27517C3A1ED8F99C00D7BB7B /* PersonTableViewCell.m */,
 				27517C361ED8CA0500D7BB7B /* AddressbookDataSource.h */,
 				27517C371ED8CA0500D7BB7B /* AddressbookDataSource.m */,
 				27517C1F1ED8C9C700D7BB7B /* AppDelegate.h */,
@@ -151,6 +159,7 @@
 				27517C2F1ED8C9C700D7BB7B /* LaunchScreen.storyboard in Resources */,
 				27517C2C1ED8C9C700D7BB7B /* Assets.xcassets in Resources */,
 				27517C2A1ED8C9C700D7BB7B /* Main.storyboard in Resources */,
+				27517C3D1ED8FC9F00D7BB7B /* defaultImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,6 +172,7 @@
 			files = (
 				27517C381ED8CA0500D7BB7B /* AddressbookDataSource.m in Sources */,
 				27517C211ED8C9C700D7BB7B /* AppDelegate.m in Sources */,
+				27517C3B1ED8F99C00D7BB7B /* PersonTableViewCell.m in Sources */,
 				27517C241ED8C9C700D7BB7B /* MasterViewController.m in Sources */,
 				27517C1E1ED8C9C700D7BB7B /* main.m in Sources */,
 				27517C271ED8C9C700D7BB7B /* DetailViewController.m in Sources */,
