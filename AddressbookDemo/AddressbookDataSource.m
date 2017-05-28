@@ -41,6 +41,7 @@
                 ABRecordRef record = CFArrayGetValueAtIndex(addressBookRecords, i);
                 // person's name
                 NSString *fullName = (NSString *)CFBridgingRelease(ABRecordCopyCompositeName(record));
+                NSString *key = (NSString *)CFBridgingRelease(ABRecordCopyValue(record, kABPersonLastNameProperty));
                 // use only the first phone number
                 ABMultiValueRef phoneNumbers = ABRecordCopyValue(record, kABPersonPhoneProperty);
                 NSString *phoneNumber = (NSString *) CFBridgingRelease(ABMultiValueCopyValueAtIndex(phoneNumbers, 0));
@@ -48,8 +49,11 @@
                 // don't include if no name or phone number
                 if (phoneNumber.length > 0 && fullName.length > 0) {
                     NSData *image = (NSData*)CFBridgingRelease(ABPersonCopyImageData(record));
+                    if (key.length == 0) {
+                        key = fullName;
+                    }
                     NSMutableDictionary *person = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                                   fullName,@"Name",phoneNumber,@"Phone", nil];
+                                                   fullName,@"Name",key,@"key",phoneNumber,@"Phone", nil];
                     if (image) {
                         [person setObject:image forKey:@"Image"];
                     }
@@ -58,13 +62,13 @@
             }
             // sort the contacts
             [mutableContacts sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-                NSString *name1 = [obj1 valueForKey:@"Name"];
-                NSString *name2 = [obj2 valueForKey:@"Name"];
+                NSString *name1 = [obj1 valueForKey:@"key"];
+                NSString *name2 = [obj2 valueForKey:@"key"];
                 return [name1 caseInsensitiveCompare:name2];
             }];
             // build the index
             for (int i=0;i<mutableContacts.count;++i) {
-                NSString *key = [[mutableContacts[i] valueForKey:@"Name"]
+                NSString *key = [[mutableContacts[i] valueForKey:@"key"]
                                  substringWithRange:NSMakeRange(0, 1)];
                 if (nil == [self.index objectForKey:key]) {
                     [self.index setObject:@(i) forKey:key];
