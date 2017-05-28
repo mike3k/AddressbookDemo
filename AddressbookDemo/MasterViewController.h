@@ -10,10 +10,10 @@
 
 @class DetailViewController;
 
-@interface MasterViewController : UITableViewController
+@interface MasterViewController : UITableViewController <UISearchResultsUpdating>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
-
+@property (strong, nonatomic) UISearchController *searchController;
 
 @end
 

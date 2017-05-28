@@ -15,6 +15,7 @@
 
 @property (nonatomic,strong) AddressbookDataSource *dataSource;
 @property (nonatomic,assign) bool loaded;
+@property (nonatomic,strong) NSArray *filteredContacts;
 @end
 
 @implementation MasterViewController
@@ -24,12 +25,20 @@
 
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.dataSource = [[AddressbookDataSource alloc] init];
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+
 }
 
 
 - (void)viewWillAppear:(BOOL)animated {
     self.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
     [super viewWillAppear:animated];
+    // load contacts the first time the view appears
     if (!self.loaded) {
         [self.dataSource requestAccess:^(bool granted) {
             [self.dataSource loadContacts:^{
@@ -40,14 +49,24 @@
     }
 }
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    NSPredicate *search = [NSPredicate predicateWithFormat:@"Name CONTAINS[c] %@",searchController.searchBar.text];
+    self.filteredContacts = [self.dataSource.contacts filteredArrayUsingPredicate:search];
+    [self.tableView reloadData];
+}
 
-- (void)insertNewObject:(id)sender {
+// convenience method to return appropriate data source depending on whether search is active
+- (NSArray*)contacts {
+    if (self.searchController.active) {
+        return self.filteredContacts;
+    } else {
+        return self.dataSource.contacts;
+    }
 }
 
 
@@ -56,7 +75,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = self.dataSource.contacts[indexPath.row];
+        NSDate *object = self.contacts[indexPath.row];
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
         [controller setDetailItem:object];
         controller.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
@@ -73,14 +92,14 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataSource.contacts.count;
+    return self.contacts.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PersonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
-    NSDictionary *object = self.dataSource.contacts[indexPath.row];
+    NSDictionary *object = self.contacts[indexPath.row];
     NSData *imageData = object[@"Image"];
     UIImage *image = nil;
     
@@ -113,6 +132,10 @@
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title
                atIndex:(NSInteger)index {
     
+    // don't scroll if search is active
+    if (self.searchController.active) {
+        return -1;
+    }
     
     if ([title isEqualToString:@"#"]) { // special case
         [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0
