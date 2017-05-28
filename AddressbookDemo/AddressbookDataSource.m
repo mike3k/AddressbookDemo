@@ -25,6 +25,7 @@
     if (self = [super init]) {
         self.contacts = nil;
         self.hasAccess = (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized);
+        self.index = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -54,6 +55,20 @@
                     }
                     [mutableContacts addObject:person];
                 }
+            }
+            // sort the contacts
+            [mutableContacts sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+                NSString *name1 = [obj1 valueForKey:@"Name"];
+                NSString *name2 = [obj2 valueForKey:@"Name"];
+                return [name1 caseInsensitiveCompare:name2];
+            }];
+            // build the index
+            for (int i=0;i<mutableContacts.count;++i) {
+                NSString *key = [[mutableContacts[i] valueForKey:@"Name"]
+                                 substringWithRange:NSMakeRange(0, 1)];
+                if (nil == [self.index objectForKey:key]) {
+                    [self.index setObject:@(i) forKey:key];
+                };
             }
             self.contacts = mutableContacts;
             if (completion) {

@@ -17,7 +17,18 @@
 - (void)configureView {
     // Update the user interface for the detail item.
     if (self.detailItem) {
-        self.detailDescriptionLabel.text = [self.detailItem description];
+        self.nameLabel.text = [self.detailItem valueForKey:@"Name"];
+        self.phoneLabel.text = [self.detailItem valueForKey:@"Phone"];
+        
+        NSData *imageData = [self.detailItem valueForKey:@"Image"];
+        UIImage *image = nil;
+        
+        if (imageData) {
+            image = [UIImage imageWithData:imageData];
+        } else {
+            image = [UIImage imageNamed:@"defaultImage"];
+        }
+        self.imageView.image = image;
     }
 }
 

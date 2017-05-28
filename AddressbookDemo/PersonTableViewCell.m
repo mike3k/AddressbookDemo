@@ -18,12 +18,19 @@
     
     self.blurView = [[UIVisualEffectView alloc]initWithEffect:blurEffect];
     self.blurView.clipsToBounds = YES;
+    self.blurView.frame = self.backgroundImage.bounds;
+    [self.backgroundImage addSubview:self.blurView];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.blurView.frame = self.backgroundImage.bounds;
 }
 
 @end

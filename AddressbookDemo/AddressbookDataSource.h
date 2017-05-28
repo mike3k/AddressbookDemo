@@ -14,5 +14,5 @@
 - (void)requestAccess:(void(^)(bool granted)) completion;
 
 @property(nonatomic,strong) NSArray *contacts;
-
+@property(nonatomic,strong) NSMutableDictionary *index;
 @end

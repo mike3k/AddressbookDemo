@@ -99,13 +99,32 @@
     imageView.image = image;
 
     cell.backgroundImage.image = image;
-
-    [cell.blurView removeFromSuperview];
-    cell.blurView.frame = cell.backgroundImage.bounds;
-    [cell.backgroundImage addSubview:cell.blurView];
-
     
     return cell;
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+    return @[@"#",@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",
+             @"J",@"K",@"L",@"M",@"N",@"O",@"P",
+             @"Q",@"R",@"S",@"T",@"U",@"V",@"W",
+             @"X",@"Y",@"Z"];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title
+               atIndex:(NSInteger)index {
+    
+    
+    if ([title isEqualToString:@"#"]) { // special case
+        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0
+                                                             inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
+    
+    NSNumber *value = [self.dataSource.index objectForKey:title];
+    if (nil != value) {
+        [tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:value.integerValue
+                                                             inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+   }
+    return -1;
 }
 
 
